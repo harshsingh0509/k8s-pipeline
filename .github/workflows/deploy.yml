@@ -19,6 +19,12 @@ jobs:
         chmod +x kubectl
         sudo mv kubectl /usr/local/bin/
 
+    # Set up kubeconfig for MicroK8s
+    - name: Configure kubeconfig
+      run: |
+        mkdir -p ~/.kube
+        echo "${KUBECONFIG_CONTENTS}" > ~/.kube/config
+
     # Deploy Kubernetes manifests
     - name: Deploy to Kubernetes
       run: |
