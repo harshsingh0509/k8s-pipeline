@@ -1,18 +1,26 @@
 name: Deploy to Kubernetes
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-    - name: Set up kubectl
-      uses: azure/setup-kubectl@v2
-      with:
-        version: 'v1.24.0'
+
+    # Install kubectl manually instead of using azure/setup-kubectl
+    - name: Install kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/v1.24.0/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    # Deploy Kubernetes manifests
     - name: Deploy to Kubernetes
       run: |
         kubectl apply -f k8s/
+
